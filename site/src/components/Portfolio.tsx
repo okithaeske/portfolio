@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Download, Mail, Github, Linkedin, ExternalLink, Moon, Sun } from 'lucide-react';
+import { CV_URL, SKILLS, PROJECTS, SOCIAL } from "@/data/portfolio";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,17 +53,8 @@ export default function Portfolio() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const skills = [
-    'Flutter', 'Angular', '.NET', 'Node.js', 'Laravel', 'Next.js',
-    'PostgreSQL', 'MongoDB', 'AWS', 'Docker', 'Kafka', 'TypeScript'
-  ];
-
-  const projects = [
-    { name: 'Traveloute', description: 'Gamified travel companion app with real-time event discovery, route planning, and social features. Built with microservices architecture.', tech: ['Flutter', 'Node.js', 'PostgreSQL', 'AWS', 'Kafka'], gradient: 'from-cyan-500 to-teal-500', url: '' },
-    { name: 'Zentara', description: 'Mental wellness platform featuring mood tracking, meditation guides, and AI-powered insights for better mental health.', tech: ['Flutter', 'Laravel', 'MongoDB', 'Docker'], gradient: 'from-purple-500 to-blue-500', url: '' },
-    { name: 'H Connect', description: 'Healthcare connectivity platform enabling seamless patient-provider communication and appointment management.', tech: ['Angular', '.NET', 'PostgreSQL', 'Azure'], gradient: 'from-pink-500 to-rose-500', url: '' },
-    { name: 'Student API', description: 'RESTful API for student management system with authentication, role-based access, and comprehensive documentation.', tech: ['Node.js', 'Express', 'MongoDB', 'JWT'], gradient: 'from-emerald-500 to-green-500', url: '' }
-  ];
+  const skills = SKILLS;
+  const projects = PROJECTS;
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -164,7 +156,7 @@ export default function Portfolio() {
               View Projects
             </button>
             <a
-              href="/cv.pdf"
+              href={CV_URL}
               download
               className={`px-8 py-4 ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-100'} rounded-lg font-semibold border ${isDark ? 'border-gray-700' : 'border-gray-300'} transition-all transform hover:scale-105 flex items-center justify-center gap-2`}
               aria-label="Download CV as PDF"
@@ -250,15 +242,15 @@ export default function Portfolio() {
             <div className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
               <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
               <div className="space-y-4">
-                <a href="mailto:okitha@example.com" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
+                <a href={`mailto:${SOCIAL.email}`} className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
                   <Mail className="w-6 h-6 text-cyan-400" />
-                  <span className="group-hover:text-cyan-400 transition-colors">okitha@example.com</span>
+                  <span className="group-hover:text-cyan-400 transition-colors">{SOCIAL.email}</span>
                 </a>
                 <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
                   <Github className="w-6 h-6 text-cyan-400" />
                   <span className="group-hover:text-cyan-400 transition-colors">GitHub</span>
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
+                <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
                   <Linkedin className="w-6 h-6 text-cyan-400" />
                   <span className="group-hover:text-cyan-400 transition-colors">LinkedIn</span>
                 </a>
