@@ -12,6 +12,8 @@ export type Project = {
   tech: string[];
   gradient: string;
   url?: string;
+  slug: string;
+  highlights?: string[];
 };
 
 export const PROJECTS: Project[] = [
@@ -22,6 +24,12 @@ export const PROJECTS: Project[] = [
     tech: ["Flutter", "Node.js", "PostgreSQL", "AWS", "Kafka"],
     gradient: "from-cyan-500 to-teal-500",
     url: "https://your-live-url-or-repo/traveloute",
+    slug: "traveloute",
+    highlights: [
+      "Real-time events & routing with scalable microservices",
+      "Async pipelines on Kafka",
+      "Cloud infra on AWS with IaC",
+    ],
   },
   {
     name: "Zentara",
@@ -30,6 +38,7 @@ export const PROJECTS: Project[] = [
     tech: ["Flutter", "Laravel", "MongoDB", "Docker"],
     gradient: "from-purple-500 to-blue-500",
     url: "https://your-live-url-or-repo/zentara",
+    slug: "zentara",
   },
   {
     name: "H Connect",
@@ -38,6 +47,7 @@ export const PROJECTS: Project[] = [
     tech: ["Angular", ".NET", "PostgreSQL", "Azure"],
     gradient: "from-pink-500 to-rose-500",
     url: "https://your-live-url-or-repo/h-connect",
+    slug: "h-connect",
   },
   {
     name: "Student API",
@@ -46,6 +56,7 @@ export const PROJECTS: Project[] = [
     tech: ["Node.js", "Express", "MongoDB", "JWT"],
     gradient: "from-emerald-500 to-green-500",
     url: "https://your-live-url-or-repo/student-api",
+    slug: "student-api",
   },
 ];
 
@@ -62,6 +73,30 @@ export const SKILLS = [
   "Docker",
   "Kafka",
   "TypeScript",
+  // Added from user request
+  "Redis",
+  "C#",
+  "Dart",
+  "Java",
+  "HTML5",
+  "JavaScript",
+  "PHP",
+  "Python",
+  "Firebase",
+  "TailwindCSS",
+  "React",
+  "MySQL",
+  "MicrosoftSQLServer",
+  "Canva",
+  "Figma",
+  "Matplotlib",
+  "NumPy",
+  "Pandas",
+  "scikit-learn",
+  "TensorFlow",
+  "GitHub",
+  "Postman",
+  "Trello",
 ];
 
 

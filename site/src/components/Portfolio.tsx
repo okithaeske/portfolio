@@ -2,6 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Download, Mail, Github, Linkedin, ExternalLink, Moon, Sun } from 'lucide-react';
 import { CV_URL, SKILLS, PROJECTS, SOCIAL } from "@/data/portfolio";
+import Link from "next/link";
+import GitHubFeatured from "@/components/GitHubFeatured";
+import FeaturedProjects from "@/components/FeaturedProjects";
+import SkillsSection from "@/components/SkillsSection";
+import ParallaxBackground from "@/components/effects/ParallaxBackground";
+import { motion, fadeInUp, staggerContainer } from "@/components/motion";
+import SectionDivider from "@/components/effects/SectionDivider";
+import HeroCanvas from "@/components/effects/HeroCanvas";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,11 +71,7 @@ export default function Portfolio() {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'} transition-colors duration-300`}>
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-0 -left-4 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse`}></div>
-        <div className={`absolute top-0 -right-4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse`} style={{ animationDelay: '2s' }}></div>
-        <div className={`absolute -bottom-8 left-20 w-96 h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse`} style={{ animationDelay: '4s' }}></div>
-      </div>
+      <ParallaxBackground isDark={isDark} />
 
       <nav className={`fixed top-0 w-full z-50 ${isDark ? 'bg-gray-950/80' : 'bg-white/80'} backdrop-blur-lg border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`} role="navigation" aria-label="Primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,6 +89,7 @@ export default function Portfolio() {
                       ? 'text-cyan-400'
                       : isDark ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-cyan-500'
                   }`}
+                  data-magnetic="0.12"
                 >
                   {item}
                 </button>
@@ -133,107 +138,65 @@ export default function Portfolio() {
       </nav>
 
       <section id="home" className="relative min-h-screen flex items-center justify-center px-4 pt-16">
-        <div className="max-w-4xl mx-auto text-center z-10">
+        {!window?.matchMedia?.('(prefers-reduced-motion: reduce)').matches && (
+          <HeroCanvas isDark={isDark} />
+        )}
+        <motion.div className="max-w-4xl mx-auto text-center z-10" variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-100px' }}>
           <div className="mb-8 inline-block">
-            <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 p-1 animate-pulse`}>
-              <div className={`w-full h-full rounded-full ${isDark ? 'bg-gray-950' : 'bg-white'} flex items-center justify-center text-4xl font-bold`}>
-                OK
-              </div>
-            </div>
+            <motion.div className={`w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 p-1`} variants={fadeInUp}>
+              <div className={`w-full h-full rounded-full ${isDark ? 'bg-gray-950' : 'bg-white'} flex items-center justify-center text-4xl font-bold`}>OK</div>
+            </motion.div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">Okitha Kaluthotage</h1>
-          <div className="text-2xl md:text-3xl mb-8 bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 bg-clip-text text-transparent font-semibold">
-            Full-Stack Developer & Cloud Architect
-          </div>
-          <p className={`text-lg md:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-12 max-w-2xl mx-auto`}>
-            Building scalable microservices, gamified applications, and seamless user experiences with modern web technologies
-          </p>
+          <motion.h1 className="text-5xl md:text-7xl font-bold mb-6" variants={fadeInUp}>Okitha Kaluthotage</motion.h1>
+          <motion.div className="text-2xl md:text-3xl mb-8 bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 bg-clip-text text-transparent font-semibold" variants={fadeInUp}>Full-Stack Developer & Cloud Architect</motion.div>
+          <motion.p className={`text-lg md:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-12 max-w-2xl mx-auto`} variants={fadeInUp}>Building scalable microservices, gamified applications, and seamless user experiences with modern web technologies</motion.p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
+            <motion.button
               onClick={() => scrollToSection('projects')}
               className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:scale-105"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
+              data-magnetic="0.2"
             >
               View Projects
-            </button>
-            <a
+            </motion.button>
+            <motion.a
               href={CV_URL}
               download
               className={`px-8 py-4 ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-100'} rounded-lg font-semibold border ${isDark ? 'border-gray-700' : 'border-gray-300'} transition-all transform hover:scale-105 flex items-center justify-center gap-2`}
               aria-label="Download CV as PDF"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
+              data-magnetic="0.2"
             >
               <Download className="w-5 h-5" />
               Download CV
-            </a>
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
       </section>
+
+      <SectionDivider />
 
       <section id="about" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">About Me</h2>
           <div className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'} shadow-xl`}>
-            <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-6`}>
-              I'm a passionate full-stack developer with expertise in building scalable cloud systems, gamified applications, and modern web experiences.
+            <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-4`}>
+              Full‑stack developer focused on outcomes: performant frontends, resilient microservices, and cloud that scales.
             </p>
-            <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-              I specialize in microservices architecture, cloud-native applications, and creating seamless user experiences.
-            </p>
+            <ul className={`list-disc pl-6 space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              <li>Ship fast with TypeScript, Next.js, and Flutter.</li>
+              <li>Design distributed systems with Kafka, Docker, and AWS.</li>
+              <li>Obsessed with DX, accessibility, and measurable impact.</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <section id="skills" className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Tech Stack</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {skills.map((skill, idx) => (
-              <div
-                key={skill}
-                className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-xl p-6 border ${isDark ? 'border-gray-800 hover:border-cyan-500/50' : 'border-gray-200 hover:border-cyan-500'} transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/20 text-center`}
-                style={{ animationDelay: `${idx * 50}ms` }}
-              >
-                <div className="text-xl font-semibold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  {skill}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SectionDivider flip />
 
-      <section id="projects" className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Featured Projects</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project) => (
-              <div
-                key={project.name}
-                className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'} hover:shadow-2xl transition-all hover:scale-105 group`}
-              >
-                <div className={`inline-block px-4 py-2 rounded-lg bg-gradient-to-r ${project.gradient} mb-4`}>
-                  <h3 className="text-2xl font-bold text-white">{project.name}</h3>
-                </div>
-                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6 leading-relaxed`}>{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map(tech => (
-                    <span key={tech} className={`px-3 py-1 ${isDark ? 'bg-gray-800' : 'bg-gray-100'} rounded-full text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href={project.url || '#'}
-                  target={project.url ? '_blank' : undefined}
-                  rel={project.url ? 'noopener noreferrer' : undefined}
-                  className={`flex items-center gap-2 ${isDark ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-600 hover:text-cyan-500'} transition-colors group-hover:gap-4 ${project.url ? '' : 'opacity-50 pointer-events-none'}`}
-                >
-                  View Project <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SkillsSection isDark={isDark} username={SOCIAL.github.replace('https://github.com/','')} baseSkills={skills} />
+
+      <FeaturedProjects username={SOCIAL.github.replace('https://github.com/','')} isDark={isDark} />
 
       <section id="contact" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -246,7 +209,7 @@ export default function Portfolio() {
                   <Mail className="w-6 h-6 text-cyan-400" />
                   <span className="group-hover:text-cyan-400 transition-colors">{SOCIAL.email}</span>
                 </a>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
+                <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} transition-colors group`}>
                   <Github className="w-6 h-6 text-cyan-400" />
                   <span className="group-hover:text-cyan-400 transition-colors">GitHub</span>
                 </a>
