@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Site
+
+A feature-heavy personal portfolio built with Next.js 16 and React 19. It combines a performant SPA experience with rich visuals: a three.js hero canvas, magnetic navigation, animated section reveals, and a skills dashboard sourced from GitHub data.
+
+## Features
+- Responsive layout with dark/light theme persistence and smooth section scrolling.
+- Motion-first UI using Framer Motion plus a reduced-motion fallback for accessibility.
+- three.js/Fiber hero background with post-processing bloom and parallax layers.
+- Dynamic skills/projects sections backed by data in `src/data/portfolio.ts` and GitHub API helpers.
+- Contact form stub that can be wired to any provider.
+
+## Tech Stack
+- Next.js 16 (App Router, React Server Components where applicable)
+- React 19 + TypeScript + ESLint 9
+- Tailwind CSS 4 for utility styling
+- @react-three/fiber, drei, and postprocessing for WebGL effects
+- Framer Motion for interactions
 
 ## Getting Started
-
-First, run the development server:
-
-```bash
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Visit `http://localhost:3000` to view the site. Hot reloading is enabled for everything inside `src/`.
+
+### Available Scripts
+- `npm run dev` – start the development server.
+- `npm run build` – create an optimized production build in `.next/`.
+- `npm run start` – serve the production build.
+- `npm run lint` – run ESLint with the repo config.
+
+## Project Structure
+```
+.
++- public/                # Static assets, favicons, OG images
++- src/
+¦  +- components/         # UI building blocks, effects, layout pieces
+¦  +- data/               # Portfolio data & constants
+¦  +- styles/             # Global styles & Tailwind layers
+¦  +- app/                # App Router entry points/pages
++- next.config.ts
++- eslint.config.mjs
++- tsconfig.json
++- package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment
+The project currently relies only on public data. Add any required secrets via `.env.local` following the Next.js environment docs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
+1. Build the app: `npm run build`.
+2. Deploy the `.next` output using your preferred platform (Vercel, Netlify, AWS, etc.).
+3. Ensure `NODE_ENV=production` matches local settings.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For deployment specifics, see the [Next.js deployment guide](https://nextjs.org/docs/app/building-your-application/deploying).
