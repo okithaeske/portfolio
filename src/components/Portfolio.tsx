@@ -69,6 +69,11 @@ export default function Portfolio() {
     setIsMenuOpen(false);
   };
 
+  const prefersReducedMotion =
+    typeof window === 'undefined'
+      ? true
+      : window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'} transition-colors duration-300`}>
       <ParallaxBackground isDark={isDark} />
@@ -76,7 +81,7 @@ export default function Portfolio() {
       <nav className={`fixed top-0 w-full z-50 ${isDark ? 'bg-gray-950/80' : 'bg-white/80'} backdrop-blur-lg border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`} role="navigation" aria-label="Primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <div className="text-xl font-bold bg-linear-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
               ESKE
             </div>
             <div className="hidden md:flex space-x-8">
@@ -138,22 +143,22 @@ export default function Portfolio() {
       </nav>
 
       <section id="home" className="relative min-h-screen flex items-center justify-center px-4 pt-16">
-        {!window?.matchMedia?.('(prefers-reduced-motion: reduce)').matches && (
+        {!prefersReducedMotion && (
           <HeroCanvas isDark={isDark} />
         )}
         <motion.div className="max-w-4xl mx-auto text-center z-10" variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-100px' }}>
           <div className="mb-8 inline-block">
-            <motion.div className={`w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 p-1`} variants={fadeInUp}>
+            <motion.div className={`w-32 h-32 rounded-full bg-linear-to-br from-cyan-500 to-purple-500 p-1`} variants={fadeInUp}>
               <div className={`w-full h-full rounded-full ${isDark ? 'bg-gray-950' : 'bg-white'} flex items-center justify-center text-4xl font-bold`}>OK</div>
             </motion.div>
           </div>
           <motion.h1 className="text-5xl md:text-7xl font-bold mb-6" variants={fadeInUp}>Okitha Kaluthotage</motion.h1>
-          <motion.div className="text-2xl md:text-3xl mb-8 bg-gradient-to-r from-cyan-400 via-purple-400 to-teal-400 bg-clip-text text-transparent font-semibold" variants={fadeInUp}>Full-Stack Developer & Cloud Architect</motion.div>
+          <motion.div className="text-2xl md:text-3xl mb-8 bg-linear-to-r from-cyan-400 via-purple-400 to-teal-400 bg-clip-text text-transparent font-semibold" variants={fadeInUp}>Full-Stack Developer & Cloud Architect</motion.div>
           <motion.p className={`text-lg md:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-12 max-w-2xl mx-auto`} variants={fadeInUp}>Building scalable microservices, gamified applications, and seamless user experiences with modern web technologies</motion.p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button
               onClick={() => scrollToSection('projects')}
-              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:scale-105"
+              className="px-8 py-4 bg-linear-to-r from-cyan-500 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:scale-105"
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
               data-magnetic="0.2"
             >
@@ -178,7 +183,7 @@ export default function Portfolio() {
 
       <section id="about" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">About Me</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">About Me</h2>
           <div className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'} shadow-xl`}>
             <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-4`}>
               Full‑stack developer focused on outcomes: performant frontends, resilient microservices, and cloud that scales.
@@ -200,7 +205,7 @@ export default function Portfolio() {
 
       <section id="contact" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Get In Touch</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Get In Touch</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
               <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
@@ -239,7 +244,7 @@ export default function Portfolio() {
                 <input type="text" name="name" placeholder="Your Name" required className={`w-full px-4 py-3 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-300'} border focus:outline-none focus:border-cyan-500 transition-colors`} />
                 <input type="email" name="email" placeholder="Your Email" required className={`w-full px-4 py-3 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-300'} border focus:outline-none focus:border-cyan-500 transition-colors`} />
                 <textarea name="message" placeholder="Your Message" rows={4} required className={`w-full px-4 py-3 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-300'} border focus:outline-none focus:border-cyan-500 transition-colors`}></textarea>
-                <button type="submit" className="w-full px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:scale-105">Send Message</button>
+                <button type="submit" className="w-full px-8 py-4 bg-linear-to-r from-cyan-500 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all transform hover:scale-105">Send Message</button>
               </form>
             </div>
           </div>
@@ -256,5 +261,3 @@ export default function Portfolio() {
     </div>
   );
 }
-
-
