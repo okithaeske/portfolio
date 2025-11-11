@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import { SpotlightCard, StarBorder } from "@appletosolutions/reactbits";
+import Reveal from "@/components/animations/Reveal";
 
 type Repo = { language: string | null };
 
@@ -116,17 +118,34 @@ export default function SkillsSection({
 	return (
 		<section id="skills" className="py-20 px-4">
 			<div className="max-w-6xl mx-auto">
-				<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Tech Stack</h2>
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-					{grouped.map(group => (
-						<div key={group.title} className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-xl p-6 border ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
-							<div className="text-sm uppercase tracking-wide mb-3 text-cyan-400">{group.title}</div>
-							<div className="flex flex-wrap gap-2">
-								{group.items.map(item => (
-									<span key={item} className={`px-3 py-1 ${isDark ? 'bg-gray-800' : 'bg-gray-100'} rounded-full text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{item}</span>
-								))}
-							</div>
-						</div>
+				<h2 className="text-4xl font-bold mb-12 text-center bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Tech Stack</h2>
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+					{grouped.map((group, idx) => (
+						<Reveal key={group.title} delay={idx * 80}>
+							<SpotlightCard
+								spotlightColor={isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)'}
+								className={`h-full rounded-2xl border p-6 backdrop-blur ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/90 shadow-lg'}`}
+							>
+								<StarBorder
+									as="div"
+									color="rgba(14, 165, 233, 0.85)"
+									speed={`${4 + idx}s`}
+									className="inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
+								>
+									{group.title}
+								</StarBorder>
+								<div className="mt-4 flex flex-wrap gap-2">
+									{group.items.map(item => (
+										<span
+											key={item}
+											className={`rounded-full px-3 py-1 text-sm font-medium shadow-sm ${isDark ? 'bg-gray-900/70 text-gray-100' : 'bg-slate-100 text-slate-700'}`}
+										>
+											{item}
+										</span>
+									))}
+								</div>
+							</SpotlightCard>
+						</Reveal>
 					))}
 				</div>
 			</div>

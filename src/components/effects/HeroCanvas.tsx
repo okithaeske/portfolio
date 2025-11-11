@@ -1,18 +1,22 @@
 "use client";
 import React, { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Points, PointMaterial } from "@react-three/drei";
+import { Points, PointMaterial } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 function Particles() {
   const positions = useMemo(() => {
+    const pseudoRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
     const num = 1500;
     const arr = new Float32Array(num * 3);
     for (let i = 0; i < num; i++) {
       const i3 = i * 3;
-      arr[i3 + 0] = (Math.random() - 0.5) * 10;
-      arr[i3 + 1] = (Math.random() - 0.5) * 6;
-      arr[i3 + 2] = (Math.random() - 0.5) * 10;
+      arr[i3 + 0] = (pseudoRandom(i3 + 1) - 0.5) * 10;
+      arr[i3 + 1] = (pseudoRandom(i3 + 2) - 0.5) * 6;
+      arr[i3 + 2] = (pseudoRandom(i3 + 3) - 0.5) * 10;
     }
     return arr;
   }, []);
@@ -33,7 +37,7 @@ export default function HeroCanvas({ isDark }: { isDark: boolean }) {
         <EffectComposer>
           <Bloom intensity={0.6} luminanceThreshold={0.1} luminanceSmoothing={0.3} mipmapBlur />
         </EffectComposer>
-        {/* Controls disabled by default; enable for dev: */}
+        {/* Controls disabled by default; re-introduce OrbitControls import before enabling */}
         {/* <OrbitControls enableZoom={false} /> */}
       </Canvas>
     </div>

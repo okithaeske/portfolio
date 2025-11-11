@@ -1,7 +1,8 @@
-"use client";
-import React, { useEffect, useState, useRef } from "react";
+﻿"use client";
+import React, { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { SpotlightCard, StarBorder, GlareHover } from "@appletosolutions/reactbits";
+import Reveal from "@/components/animations/Reveal";
 
 type Repo = {
   id: number;
@@ -25,13 +26,14 @@ export default function FeaturedProjects({ username, isDark }: { username: strin
   const [repos, setRepos] = useState<Repo[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let aborted = false;
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`, { cache: "no-store" });
+        const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=60`, { cache: "no-store" });
         if (!res.ok) throw new Error(`GitHub ${res.status}`);
         const data: Repo[] = await res.json();
         if (aborted) return;
@@ -41,8 +43,8 @@ export default function FeaturedProjects({ username, isDark }: { username: strin
           .slice(0, 6);
         setRepos(selected);
         setError(null);
-      } catch (e: any) {
-        if (!aborted) setError(e?.message || "Failed to load");
+      } catch (error) {
+        if (!aborted) setError(error instanceof Error ? error.message : "Failed to load");
       } finally {
         if (!aborted) setLoading(false);
       }
@@ -51,71 +53,102 @@ export default function FeaturedProjects({ username, isDark }: { username: strin
     return () => {
       aborted = true;
     };
-  }, [username]);
-
-  if (loading) return null;
-  if (error || !repos || repos.length === 0) return null;
+  }, [username, reloadKey]);
+  
+  const handleRetry = () => setReloadKey(key => key + 1);
 
   return (
     <section id="projects" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl font-bold mb-12 text-center bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
           Featured Projects
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {repos.map((repo, idx) => (
-            <TiltCard key={repo.id} className={`${isDark ? 'bg-gray-900/50' : 'bg-white'} backdrop-blur-sm rounded-2xl p-8 border ${isDark ? 'border-gray-800' : 'border-gray-200'} hover:shadow-2xl transition-all group`}>
-              <div className={`inline-block px-4 py-2 rounded-lg bg-gradient-to-r ${gradients[idx % gradients.length]} mb-4`}>
-                <h3 className="text-2xl font-bold text-white">{repo.name}</h3>
+        {(() => {
+          if (loading) {
+            return (
+              <div className="grid gap-8 md:grid-cols-2">
+                {Array.from({ length: 2 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`h-56 rounded-3xl border ${isDark ? 'border-white/5 bg-white/5' : 'border-slate-200 bg-white/90'} animate-pulse`}
+                  />
+                ))}
               </div>
-              <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6 leading-relaxed`}>{repo.description || 'No description provided.'}</p>
-              <div className="flex items-center gap-3 text-sm mb-6">
-                <span className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{repo.language || 'Unknown'}</span>
-                <span className={`${isDark ? 'text-gray-500' : 'text-gray-500'}`}>•</span>
-                <span className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>⭐ {repo.stargazers_count}</span>
+            );
+          }
+
+          if (error) {
+            return (
+              <div className={`rounded-3xl border px-6 py-10 text-center ${isDark ? 'border-red-500/20 bg-red-500/10 text-red-200' : 'border-red-200 bg-red-50 text-red-700'}`}>
+                <p className="text-base font-medium">Couldn&apos;t reach GitHub ({error}).</p>
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  className="mt-4 inline-flex items-center justify-center rounded-full bg-linear-to-r from-cyan-500 to-teal-500 px-5 py-2 text-sm font-semibold text-white shadow"
+                >
+                  Try again
+                </button>
               </div>
-              <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 ${isDark ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-600 hover:text-cyan-500'} transition-colors group-hover:gap-4`}>
-                View Repo <ExternalLink className="w-4 h-4" />
-              </a>
-            </TiltCard>
-          ))}
-        </div>
+            );
+          }
+
+          if (!repos || repos.length === 0) {
+            return (
+              <div className={`rounded-3xl border px-6 py-10 text-center ${isDark ? 'border-white/5 bg-white/5 text-gray-300' : 'border-slate-200 bg-white text-gray-600'}`}>
+                <p className="font-medium">No public repositories to show yet.</p>
+                <p className="mt-2 text-sm">Add manual highlights in <span className="font-mono">src/data/portfolio.ts</span>.</p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="grid gap-8 md:grid-cols-2">
+              {repos.map((repo, idx) => (
+                <Reveal key={repo.id} delay={idx * 120}>
+                  <GlareHover
+                    className="rounded-3xl"
+                    background={isDark ? "rgba(2, 6, 23, 0.95)" : "rgba(255, 255, 255, 0.95)"}
+                    borderRadius="1.75rem"
+                    glareColor="rgba(34, 211, 238, 0.35)"
+                    glareOpacity={0.45}
+                  >
+                    <SpotlightCard
+                      spotlightColor="rgba(59, 130, 246, 0.2)"
+                      className={`h-full rounded-3xl border p-8 backdrop-blur ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/90 shadow-2xl'}`}
+                    >
+                      <div className={`inline-flex items-center rounded-2xl bg-gradient-to-r ${gradients[idx % gradients.length]} px-4 py-2 text-white`}>
+                        <h3 className="text-2xl font-bold tracking-tight">{repo.name}</h3>
+                      </div>
+                      <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-6 mt-4 leading-relaxed`}>
+                        {repo.description || 'No description provided.'}
+                      </p>
+                      <div className="mb-6 flex flex-wrap items-center gap-4 text-sm">
+                        <span className={`rounded-full px-3 py-1 ${isDark ? 'bg-cyan-500/10 text-cyan-200' : 'bg-cyan-50 text-cyan-700'}`}>
+                          {repo.language || 'Unknown'}
+                        </span>
+                        <span className={`flex items-center gap-2 ${isDark ? 'text-amber-200' : 'text-amber-600'}`}>
+                          ★ {repo.stargazers_count}
+                        </span>
+                      </div>
+                      <StarBorder
+                        as="a"
+                        href={repo.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
+                        color="rgba(14, 165, 233, 0.8)"
+                      >
+                        View Repo
+                        <ExternalLink className="w-4 h-4" />
+                      </StarBorder>
+                    </SpotlightCard>
+                  </GlareHover>
+                </Reveal>
+              ))}
+            </div>
+          );
+        })()}
       </div>
     </section>
   );
 }
-
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-50, 50], [10, -10]);
-  const rotateY = useTransform(x, [-50, 50], [-10, 10]);
-
-  function onMouseMove(e: React.MouseEvent) {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    const px = e.clientX - rect.left - rect.width / 2;
-    const py = e.clientY - rect.top - rect.height / 2;
-    x.set(Math.max(-50, Math.min(50, px / (rect.width / 2) * 50)));
-    y.set(Math.max(-50, Math.min(50, py / (rect.height / 2) * 50)));
-  }
-
-  function onMouseLeave() {
-    x.set(0); y.set(0);
-  }
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-      className={className}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function MagneticCursor() {
@@ -8,8 +8,49 @@ export default function MagneticCursor() {
   const x = useSpring(cursorX, { stiffness: 300, damping: 30, mass: 0.6 });
   const y = useSpring(cursorY, { stiffness: 300, damping: 30, mass: 0.6 });
   const [visible, setVisible] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (!window.matchMedia) {
+      const frame = requestAnimationFrame(() => setEnabled(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const coarsePointer = window.matchMedia('(pointer: coarse)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => {
+      const interactive = !coarsePointer.matches && !reducedMotion.matches;
+      setEnabled(interactive);
+      if (!interactive) document.body.classList.remove('cursor-magnet');
+    };
+
+    update();
+
+    const listeners = [coarsePointer, reducedMotion];
+    listeners.forEach((mq) => {
+      if (typeof mq.addEventListener === 'function') {
+        mq.addEventListener('change', update);
+      } else {
+        mq.addListener?.(update);
+      }
+    });
+
+    return () => {
+      listeners.forEach((mq) => {
+        if (typeof mq.removeEventListener === 'function') {
+          mq.removeEventListener('change', update);
+        } else {
+          mq.removeListener?.(update);
+        }
+      });
+      document.body.classList.remove('cursor-magnet');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const onMove = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -24,9 +65,10 @@ export default function MagneticCursor() {
       window.removeEventListener('mouseenter', onEnter);
       window.removeEventListener('mouseleave', onLeave);
     };
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
     const handleHover = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)?.closest('[data-magnetic]') as HTMLElement | null;
       document.body.classList.toggle('cursor-magnet', Boolean(target));
@@ -47,9 +89,9 @@ export default function MagneticCursor() {
       window.removeEventListener('mousemove', handleHover);
       window.removeEventListener('mouseout', reset);
     };
-  }, []);
+  }, [enabled]);
 
-  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return null;
+  if (!enabled) return null;
 
   return (
     <motion.div

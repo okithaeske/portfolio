@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ position: "relative" }}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ScrollProgress />
         <MagneticCursor />
