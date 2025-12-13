@@ -116,7 +116,7 @@ export default function SkillsSection({
 	}, [baseSkills, ghSkills]);
 
 	return (
-		<section id="skills" className="py-20 px-4">
+		<section id="skills" className="py-16 md:py-20 px-4">
 			<div className="max-w-6xl mx-auto">
 				<h2 className="text-4xl font-bold mb-12 text-center bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Tech Stack</h2>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -138,7 +138,7 @@ export default function SkillsSection({
 									{group.items.map(item => (
 										<span
 											key={item}
-											className={`rounded-full px-3 py-1 text-sm font-medium shadow-sm ${isDark ? 'bg-gray-900/70 text-gray-100' : 'bg-slate-100 text-slate-700'}`}
+											className={`rounded-full px-3 py-1 text-sm font-medium shadow-sm transition-transform hover:scale-105 hover:bg-opacity-80 cursor-default ${isDark ? 'bg-gray-900/70 text-gray-100' : 'bg-slate-100 text-slate-700'}`}
 										>
 											{item}
 										</span>

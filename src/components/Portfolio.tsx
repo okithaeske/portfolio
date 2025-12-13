@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { CV_URL, PROJECTS, SKILLS, SOCIAL } from "@/data/portfolio";
 import type { Project } from "@/data/portfolio";
-import FeaturedProjects from "@/components/FeaturedProjects";
 import SkillsSection from "@/components/SkillsSection";
 import ParallaxBackground from "@/components/effects/ParallaxBackground";
 import { motion, fadeInUp, staggerContainer } from "@/components/motion";
@@ -413,7 +412,7 @@ export default function Portfolio() {
       <nav className={`fixed top-0 w-full z-50 ${isDark ? 'bg-gray-950/80' : 'bg-white/80'} backdrop-blur-lg border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`} role="navigation" aria-label="Primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="text-xl font-bold bg-linear-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <div className="text-xl font-bold bg-linear-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
               ESKE
             </div>
             <div className="hidden md:flex items-center gap-6">
@@ -472,7 +471,7 @@ export default function Portfolio() {
       </nav>
 
       
-      <section id="home" ref={heroSectionRef} className="relative min-h-screen pt-28 pb-16">
+      <section id="home" ref={heroSectionRef} className="relative min-h-screen pt-24 pb-12 md:pt-28 md:pb-16">
         {heroVisible && !prefersReducedMotion && <HeroCanvas isDark={isDark} />}
         <motion.div
           className={`${containerClass} relative z-10 space-y-12`}
@@ -498,7 +497,7 @@ export default function Portfolio() {
                 />
               </motion.div>
               <motion.div variants={fadeInUp}>
-                <GradientText className="text-5xl md:text-7xl font-bold leading-tight">
+                <GradientText className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight tracking-tight">
                   Okitha Kaluthotage
                 </GradientText>
               </motion.div>
@@ -618,7 +617,7 @@ export default function Portfolio() {
               </Reveal>
             </div>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
             {heroStats.map((stat, idx) => (
               <Reveal key={stat.label} delay={idx * 90}>
                 <div className={`rounded-2xl border p-4 ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/90 shadow-xl'}`}>
@@ -636,11 +635,11 @@ export default function Portfolio() {
       </section>
       <SectionDivider />
 
-      <section id="projects" className="py-20" aria-labelledby="projects-title">
+      <section id="projects" className="py-16 md:py-20" aria-labelledby="projects-title">
         <div className={`${containerClass} max-w-6xl`}>
           <div className="text-center mb-12 space-y-4">
             <FontReadySplitText
-              text="Selected case studies"
+              text="Selected Work"
               splitType="chars"
               className={`text-sm font-semibold uppercase tracking-[0.4em] ${isDark ? 'text-cyan-200/80' : 'text-cyan-600/70'}`}
               textAlign="center"
@@ -714,11 +713,11 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <FeaturedProjects username={SOCIAL.github.replace('https://github.com/','')} isDark={isDark} />
+
 
       <SectionDivider />
 
-      <section id="experience" className="py-20">
+      <section id="experience" className="py-16 md:py-20">
         <div className={`${containerClass} max-w-6xl`}>
           <div className="text-center mb-12 space-y-4">
             <FontReadySplitText
@@ -770,11 +769,11 @@ export default function Portfolio() {
 
       <SectionDivider flip />
 
-      <section id="skills" className="py-20">
+      <section id="skills" className="py-16 md:py-20">
         <SkillsSection isDark={isDark} username={SOCIAL.github.replace('https://github.com/','')} baseSkills={skills} />
       </section>
 
-      <section className="py-20">
+      <section className="py-16 md:py-20">
         <div className={`${containerClass} max-w-6xl grid gap-8 lg:grid-cols-[2fr_3fr]`}>
           <SpotlightCard
             spotlightColor="rgba(248, 113, 113, 0.2)"
@@ -839,7 +838,7 @@ export default function Portfolio() {
 
       <SectionDivider />
 
-      <section id="contact" className="py-20">
+      <section id="contact" className="py-16 md:py-20">
         <div className={`${containerClass} max-w-6xl grid gap-10 lg:grid-cols-[2fr_3fr]`}>
           <SpotlightCard
             spotlightColor="rgba(34, 211, 238, 0.2)"
@@ -903,9 +902,9 @@ export default function Portfolio() {
               }}
               aria-label="Contact form"
             >
-              <input type="text" name="name" placeholder="Your Name" required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white' : 'border-slate-200 bg-white'} focus:border-cyan-400 outline-none transition`} />
-              <input type="email" name="email" placeholder="Your Email" required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white' : 'border-slate-200 bg-white'} focus:border-cyan-400 outline-none transition`} />
-              <textarea name="message" placeholder="Your Message" rows={4} required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white' : 'border-slate-200 bg-white'} focus:border-cyan-400 outline-none transition`} />
+              <input type="text" name="name" placeholder="Your Name" required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white placeholder-gray-500' : 'border-slate-200 bg-white placeholder-gray-400'} focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 outline-none transition-all duration-300`} />
+              <input type="email" name="email" placeholder="Your Email" required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white placeholder-gray-500' : 'border-slate-200 bg-white placeholder-gray-400'} focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 outline-none transition-all duration-300`} />
+              <textarea name="message" placeholder="Your Message" rows={4} required className={`w-full rounded-2xl border px-4 py-3 ${isDark ? 'border-white/10 bg-white/5 text-white placeholder-gray-500' : 'border-slate-200 bg-white placeholder-gray-400'} focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 outline-none transition-all duration-300`} />
               <ClickSpark sparkColor="#c084fc" sparkRadius={28} sparkCount={10}>
                 <StarBorder
                   as="button"
@@ -922,9 +921,9 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <footer className={`py-8 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+      <footer className={`py-8 border-t ${isDark ? 'border-white/5 bg-gray-950/50' : 'border-gray-200 bg-gray-50/50'}`}>
         <div className={`${containerClass} max-w-6xl text-center`}>
-          <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+          <p className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
             © {new Date().getFullYear()} Okitha Kaluthotage · Built with Next.js, Tailwind, and a lot of coffee.
           </p>
         </div>
