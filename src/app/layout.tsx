@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import MagneticCursor from "@/components/effects/MagneticCursor";
-import ScrollProgress from "@/components/effects/ScrollProgress";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["300", "400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "ESKE Portfolio",
-  description: "Okitha Kaluthotage's interactive developer portfolio built with Next.js.",
+  title: "Okitha Kaluthotage — Half Code Half Chaos",
+  description: "Backend Engineer. Cloud-native integrations. Azure. TypeScript. C#. Go.",
 };
 
 export default function RootLayout({
@@ -25,10 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ position: "relative" }}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ScrollProgress />
-        <MagneticCursor />
+    <html lang="en">
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
         {children}
       </body>
     </html>

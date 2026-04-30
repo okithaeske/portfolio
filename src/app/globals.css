@@ -1,39 +1,64 @@
 @import "tailwindcss";
 
+/* ── V2 CSS VARIABLES ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cv2-bg: #03030a;
+  --cv2-cyan: #c8c8c8;
+  --cv2-purple: #787878;
+  --cv2-text: #dde0f0;
+  --cv2-muted: #4a4a6a;
+  --cv2-mono: var(--font-jetbrains-mono, 'JetBrains Mono', monospace);
+  --cv2-ui: var(--font-space-grotesk, 'Space Grotesk', sans-serif);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* Ensure viewport is positioned for scroll measurements */
 html {
-  position: relative;
+  scroll-behavior: auto;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cv2-bg);
+  color: var(--cv2-text);
+  font-family: var(--cv2-ui);
+  overflow-x: hidden;
+  cursor: none;
 }
 
-/* Reactbits Beams expects this container style inside Canvas; apply it globally instead. */
-.beams-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+/* Cursor hover state */
+body.cv2-hov #cv2-cur-ring {
+  width: 48px !important;
+  height: 48px !important;
+  border-color: var(--cv2-purple) !important;
 }
 
+/* Scanlines overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9995;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.025) 2px,
+    rgba(0, 0, 0, 0.025) 4px
+  );
+}
+
+/* ── KEYFRAME ANIMATIONS ── */
+@keyframes cv2FogDrift {
+  from { transform: translate(-4%, -3%) scale(1); }
+  to   { transform: translate(4%, 3%) scale(1.06); }
+}
+
+@keyframes cv2Beam {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1; }
+}
