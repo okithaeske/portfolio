@@ -2,6 +2,9 @@
   "permissions": {
     "additionalDirectories": [
       "C:\\Users\\DELL\\.claude\\projects\\e--Projects-portfolio\\memory"
+    ],
+    "allow": [
+      "Bash(npx tsc *)"
     ]
   }
 }

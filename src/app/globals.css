@@ -62,3 +62,19 @@ body::after {
   0%, 100% { opacity: 0.3; }
   50%       { opacity: 1; }
 }
+
+/* ── RESPONSIVE / TOUCH ── */
+@media (pointer: coarse) {
+  body { cursor: auto; }
+  #cv2-cur-dot, #cv2-cur-ring { display: none; }
+  button, a, [data-hov] { cursor: pointer; }
+}
+
+@media (max-width: 767px) {
+  #cv2-tweaks-panel {
+    width: calc(100vw - 32px) !important;
+    right: 16px !important;
+    left: 16px !important;
+    bottom: 16px !important;
+  }
+}

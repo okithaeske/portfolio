@@ -44,6 +44,7 @@ export default function Portfolio() {
   const [ghRepos, setGhRepos] = useState<GHRepo[]>([]);
   const [ghLabel, setGhLabel] = useState("");
   const [projPage, setProjPage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Easter eggs
   const [eggOpen,    setEggOpen]    = useState(false);
@@ -89,6 +90,14 @@ export default function Portfolio() {
     document.documentElement.style.setProperty("--cv2-cyan",   s.cyan);
     document.documentElement.style.setProperty("--cv2-purple", s.purple);
   }, [tweaks]);
+
+  // ── MOBILE DETECTION ─────────────────────────────────────────────────
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // ── CUSTOM CURSOR ─────────────────────────────────────────────────────
   useEffect(() => {
@@ -489,7 +498,7 @@ export default function Portfolio() {
 
       {/* TWEAKS PANEL */}
       {showTP && (
-        <div style={{ position:"fixed",bottom:28,right:28,zIndex:9000,width:272,
+        <div id="cv2-tweaks-panel" style={{ position:"fixed",bottom:28,right:28,zIndex:9000,width:272,
           background:"rgba(4,4,14,0.96)",border:"1px solid rgba(0,240,255,0.22)",
           backdropFilter:"blur(16px)",fontFamily:"var(--cv2-mono)",
           boxShadow:"0 0 40px rgba(0,240,255,0.07),0 24px 48px rgba(0,0,0,0.7)" }}>
@@ -556,40 +565,42 @@ export default function Portfolio() {
           <div ref={progRef} style={{ position:"absolute",top:0,left:0,right:0,height:1,zIndex:11,background:"linear-gradient(90deg, var(--cv2-cyan), var(--cv2-purple))",transformOrigin:"left",transform:"scaleX(0)" }} />
 
           {/* HUD FRAME */}
-          <div style={{ position:"absolute",inset:0,zIndex:10,pointerEvents:"none",fontFamily:"var(--cv2-mono)",fontSize:11,color:"var(--cv2-muted)",letterSpacing:".12em" }}>
+          <div style={{ position:"absolute",inset:0,zIndex:10,pointerEvents:"none",fontFamily:"var(--cv2-mono)",fontSize:isMobile?9:11,color:"var(--cv2-muted)",letterSpacing:".12em" }}>
             {/* TL */}
-            <div style={{ position:"absolute",top:28,left:36,display:"flex",flexDirection:"column",gap:4 }}>
+            <div style={{ position:"absolute",top:isMobile?14:28,left:isMobile?16:36,display:"flex",flexDirection:"column",gap:4 }}>
               <div style={{ color:"var(--cv2-cyan)" }}>OK_ESKE</div>
               <div>// backend_engineer</div>
             </div>
             {/* TR */}
-            <div style={{ position:"absolute",top:28,right:36,textAlign:"right",display:"flex",flexDirection:"column",gap:4 }}>
+            <div style={{ position:"absolute",top:isMobile?14:28,right:isMobile?16:36,textAlign:"right",display:"flex",flexDirection:"column",gap:4 }}>
               <div ref={hudSectionRef}>SECTOR_00 // ENTRY</div>
-              <div
-                id="cv2-hud-coords"
-                style={{ cursor:"none",pointerEvents:"all" }}
-                onClick={() => {
-                  const el = document.getElementById("cv2-hud-coords") as HTMLElement | null;
-                  if (!el) return;
-                  el.style.color = "var(--cv2-cyan)";
-                  el.textContent = "> PING SENT · COLOMBO, LK";
-                  setTimeout(() => { el.style.color = ""; el.textContent = "LAT 6.9271° N · LNG 79.8612° E"; }, 2000);
-                }}
-              >LAT 6.9271° N · LNG 79.8612° E</div>
+              {!isMobile && (
+                <div
+                  id="cv2-hud-coords"
+                  style={{ cursor:"none",pointerEvents:"all" }}
+                  onClick={() => {
+                    const el = document.getElementById("cv2-hud-coords") as HTMLElement | null;
+                    if (!el) return;
+                    el.style.color = "var(--cv2-cyan)";
+                    el.textContent = "> PING SENT · COLOMBO, LK";
+                    setTimeout(() => { el.style.color = ""; el.textContent = "LAT 6.9271° N · LNG 79.8612° E"; }, 2000);
+                  }}
+                >LAT 6.9271° N · LNG 79.8612° E</div>
+              )}
             </div>
             {/* BL */}
-            <div style={{ position:"absolute",bottom:28,left:36 }}>
+            <div style={{ position:"absolute",bottom:isMobile?14:28,left:isMobile?16:36 }}>
               <div ref={hudDepthRef}>DEPTH 000%</div>
             </div>
             {/* BR */}
-            <div style={{ position:"absolute",bottom:28,right:36,textAlign:"right",display:"flex",flexDirection:"column",gap:4 }}>
+            <div style={{ position:"absolute",bottom:isMobile?14:28,right:isMobile?16:36,textAlign:"right",display:"flex",flexDirection:"column",gap:4 }}>
               <div>2026</div>
-              <div style={{ color:"rgba(0,240,255,0.3)" }}>// try ↑↑↓↓←→←→BA</div>
+              {!isMobile && <div style={{ color:"rgba(0,240,255,0.3)" }}>// try ↑↑↓↓←→←→BA</div>}
             </div>
           </div>
 
           {/* NAV DOTS */}
-          <div style={{ position:"absolute",right:36,top:"50%",transform:"translateY(-50%)",zIndex:12,display:"flex",flexDirection:"column",gap:10,pointerEvents:"all" }}>
+          <div style={{ position:"absolute",right:isMobile?12:36,top:"50%",transform:"translateY(-50%)",zIndex:12,display:"flex",flexDirection:"column",gap:10,pointerEvents:"all" }}>
             {["Entry","About","Stack","Work","Contact"].map((title, i) => (
               <div
                 key={title}
@@ -626,7 +637,7 @@ export default function Portfolio() {
                 setTimeout(() => { scatterActive.current = false; }, 1800);
               }}
             />
-            <div id="cv2-hero-label" style={{ position:"relative",zIndex:6,fontFamily:"var(--cv2-mono)",fontSize:11,color:"var(--cv2-cyan)",letterSpacing:".3em",textTransform:"uppercase",marginBottom:20,opacity:0,transform:"translateY(12px)",transition:"opacity 1s, transform 1s" }}>
+            <div id="cv2-hero-label" style={{ position:"relative",zIndex:6,fontFamily:"var(--cv2-mono)",fontSize:isMobile?9:11,color:"var(--cv2-cyan)",letterSpacing:isMobile?".1em":".3em",textTransform:"uppercase",marginBottom:20,opacity:0,transform:"translateY(12px)",transition:"opacity 1s, transform 1s",textAlign:"center",padding:"0 16px" }}>
               // backend_engineer.ts · integration_dev · cloud_dev
             </div>
             <h1
@@ -654,7 +665,7 @@ export default function Portfolio() {
             ref={el => { secRefs.current[1] = el; }}
             style={{ position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",willChange:"transform, opacity",zIndex:4 }}
           >
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 480px",gap:80,alignItems:"center",padding:"0 80px",width:"100%",maxWidth:1200 }}>
+            <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 480px",gap:isMobile?32:80,alignItems:"center",padding:isMobile?"0 24px":"0 80px",width:"100%",maxWidth:1200 }}>
               <div>
                 <div style={{ fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-cyan)",letterSpacing:".25em",marginBottom:20 }}>// SECTOR_01 · ABOUT</div>
                 <div style={{ fontSize:"clamp(32px,4vw,56px)",fontWeight:700,lineHeight:1.1,letterSpacing:"-0.02em" }}>
@@ -686,8 +697,8 @@ export default function Portfolio() {
             ref={el => { secRefs.current[2] = el; }}
             style={{ position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",willChange:"transform, opacity",zIndex:4 }}
           >
-            <div style={{ padding:"0 80px",width:"100%",maxWidth:1200 }}>
-              <div style={{ display:"flex",alignItems:"flex-end",justifyContent:"space-between",marginBottom:48 }}>
+            <div style={{ padding:isMobile?"0 24px":"0 80px",width:"100%",maxWidth:1200 }}>
+              <div style={{ display:"flex",flexDirection:isMobile?"column":"row",alignItems:isMobile?"flex-start":"flex-end",justifyContent:"space-between",marginBottom:isMobile?28:48,gap:isMobile?16:0 }}>
                 <div>
                   <div style={{ fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-cyan)",letterSpacing:".25em",marginBottom:12 }}>// SECTOR_02 · STACK</div>
                   <div style={{ fontSize:"clamp(36px,4vw,56px)",fontWeight:700,letterSpacing:"-0.02em" }}>The Weapons<br /><span style={{ color:"var(--cv2-cyan)" }}>of Choice</span></div>
@@ -716,15 +727,15 @@ export default function Portfolio() {
           {/* ── SEC 3: PROJECTS ── */}
           <div
             ref={el => { secRefs.current[3] = el; }}
-            style={{ position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"center",padding:"0 80px",alignItems:"flex-start",willChange:"transform, opacity",zIndex:4 }}
+            style={{ position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"center",padding:isMobile?"0 24px":"0 80px",alignItems:"flex-start",willChange:"transform, opacity",zIndex:4 }}
           >
             <div style={{ fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-cyan)",letterSpacing:".25em",textTransform:"uppercase",marginBottom:8,display:"flex",alignItems:"center",gap:12 }}>
               <span style={{ display:"block",width:20,height:1,background:"var(--cv2-cyan)" }} />
               SECTOR_03 · WORK
             </div>
-            <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",maxWidth:1200,marginBottom:28 }}>
+            <div style={{ display:"flex",flexDirection:isMobile?"column":"row",justifyContent:"space-between",alignItems:isMobile?"flex-start":"center",width:"100%",maxWidth:1200,marginBottom:isMobile?16:28,gap:isMobile?12:0 }}>
               <div style={{ fontSize:"clamp(28px,3.5vw,48px)",fontWeight:700,letterSpacing:"-0.02em" }}>Selected <span style={{ color:"var(--cv2-cyan)" }}>Projects</span></div>
-              <div style={{ display:"flex",alignItems:"center",gap:16 }}>
+              <div style={{ display:"flex",alignItems:"center",gap:isMobile?8:16,flexWrap:"wrap" }}>
                 <span style={{ fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-muted)" }}>{ghLabel}</span>
                 <button onClick={() => loadGH(true)} style={{ fontFamily:"var(--cv2-mono)",fontSize:10,letterSpacing:".1em",textTransform:"uppercase",padding:"8px 16px",border:"1px solid rgba(0,240,255,0.2)",background:"transparent",color:"var(--cv2-cyan)",cursor:"none",transition:"all .3s" }}>↻ Sync GitHub</button>
                 <div style={{ display:"flex",alignItems:"center",gap:8 }}>
@@ -771,7 +782,7 @@ export default function Portfolio() {
             ref={el => { secRefs.current[4] = el; }}
             style={{ position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",willChange:"transform, opacity",zIndex:4 }}
           >
-            <div style={{ textAlign:"center",maxWidth:700,padding:"0 40px" }}>
+            <div style={{ textAlign:"center",maxWidth:700,padding:isMobile?"0 20px":"0 40px" }}>
               <div style={{ fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-cyan)",letterSpacing:".25em",textTransform:"uppercase",marginBottom:24 }}>// SECTOR_04 · CONTACT</div>
               <div style={{ fontSize:"clamp(40px,6vw,80px)",fontWeight:700,letterSpacing:"-0.03em",lineHeight:1,marginBottom:48 }}>
                 Let&apos;s build<br /><span style={{ color:"var(--cv2-cyan)" }}>something.</span>
@@ -797,7 +808,7 @@ export default function Portfolio() {
           </div>
 
           {/* FOOTER */}
-          <div style={{ position:"absolute",bottom:0,left:0,right:0,padding:"0 36px 20px",display:"flex",justifyContent:"space-between",fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-muted)",pointerEvents:"none",zIndex:12 }}>
+          <div style={{ position:"absolute",bottom:0,left:0,right:0,padding:isMobile?"0 16px 14px":"0 36px 20px",display:"flex",justifyContent:"space-between",fontFamily:"var(--cv2-mono)",fontSize:10,color:"var(--cv2-muted)",pointerEvents:"none",zIndex:12 }}>
             <span>Okitha Kaluthotage © 2026</span>
             <span>Code and Chaos</span>
           </div>
